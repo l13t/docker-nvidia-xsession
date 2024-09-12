@@ -15,9 +15,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
 COPY src/supervisord.conf /etc/supervisor.conf
 COPY src/setup_script.sh ${INST_SCRIPTS}/setup_script.sh
 
-RUN bash ${INST_SCRIPTS}/setup_script.sh
-
-RUN useradd --system --create-home --uid 1001 --gid 0 ifaas
+RUN bash ${INST_SCRIPTS}/setup_script.sh && \
+    useradd --system --create-home --uid 1001 --gid 0 ifaas
 
 COPY src/xorg.conf /etc/X11/xorg.conf
 

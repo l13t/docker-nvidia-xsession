@@ -87,7 +87,7 @@ build {
       "sudo DEBIAN_FRONTEND=noninteractive apt-get -y install xserver-xorg-video-nvidia-550-server libnvidia-cfg1-550-server mesa-vulkan-drivers",
       "sudo apt search ubuntu-drivers-common",
       "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ubuntu-drivers-common",
-      "sudo ubuntu-drivers install nvidia:535-server",
+      "sudo ubuntu-drivers install nvidia:550-server",
       "curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg   && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list |     sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' |     sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list",
       "sudo sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list",
       "sudo apt-get update",
