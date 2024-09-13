@@ -42,7 +42,7 @@ source "amazon-ebs" "ubuntu_2204_ami_amd64" {
       "tag:Name" : "devops-tooling-private-us-east-1c"
       "tag:Name" : "devops-tooling-private-us-east-1d"
       # "tag:Name" : "devops-tooling-private-us-east-1e" # For some reason we can't create instances in this subnet
-      "tag:Name" : "devops-tooling-private-us-east-1f"
+      # "tag:Name" : "devops-tooling-private-us-east-1f"
     }
     most_free = true
     random    = true
@@ -54,7 +54,7 @@ source "amazon-ebs" "ubuntu_2204_ami_amd64" {
   temporary_key_pair_type = "ed25519"
 
   #   instance_type = "g6.xlarge"
-  instance_type = "m6a.large"
+  instance_type = "g6.xlarge"
 }
 
 build {
@@ -84,15 +84,24 @@ build {
     inline = [
       "export DEBIAN_FRONTEND=noninteractive",
       "sudo apt-get update",
-      "sudo DEBIAN_FRONTEND=noninteractive apt-get -y install xserver-xorg-video-nvidia-550-server libnvidia-cfg1-550-server mesa-vulkan-drivers",
-      "sudo apt search ubuntu-drivers-common",
-      "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ubuntu-drivers-common",
-      "sudo ubuntu-drivers install nvidia:550-server",
+      "sudo DEBIAN_FRONTEND=noninteractive apt-get -y install nvidia-driver-550-server xserver-xorg-video-nvidia-550-server libnvidia-cfg1-550-server mesa-vulkan-drivers",
+      # "sudo apt search ubuntu-drivers-common",
+      # "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ubuntu-drivers-common",
+      # "sudo ubuntu-drivers install nvidia:550-server",
       "curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg   && curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list |     sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' |     sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list",
       "sudo sed -i -e '/experimental/ s/^#//g' /etc/apt/sources.list.d/nvidia-container-toolkit.list",
       "sudo apt-get update",
       "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y nvidia-container-toolkit",
       "sudo nvidia-ctk runtime configure --runtime=containerd",
+    ]
+  }
+
+  provisioner "shell" {
+    inline = [
+      "echo -e '[Unit]\nDescription=Run nvidia-smi at system startup\n\n[Service]\nExecStart=/usr/bin/nvidia-smi\nType=oneshot\nRemainAfterExit=yes\n\n[Install]\nWantedBy=multi-user.target' | sudo tee /etc/systemd/system/nvidia-smi.service",
+      "sudo systemctl daemon-reload",
+      "sudo systemctl enable nvidia-smi.service",
+      "sudo systemctl start nvidia-smi.service",
     ]
   }
 }
