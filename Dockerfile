@@ -15,6 +15,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 COPY src/setup_script.sh ${INST_SCRIPTS}/setup_script.sh
 
 RUN bash ${INST_SCRIPTS}/setup_script.sh && \
+    groupadd -g 0 root && \
     useradd --system --create-home --uid 1001 --gid 0 -G 0,1001 ifaas
 
 COPY src/xorg.conf /etc/X11/xorg.conf
@@ -27,7 +28,7 @@ RUN gpg --batch --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 595E85A6B1
     && gpg --batch --verify /tini.asc /tini && \
     chmod +x /tini
 
-ADD src/lightdm.conf /etc/lightdm/lightdm.conf
+COPY src/lightdm.conf /etc/lightdm/lightdm.conf
 
 ENV LC_ALL="en_US.UTF-8"
 ENV LANGUAGE="en_US:en"
