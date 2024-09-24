@@ -14,9 +14,8 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 COPY src/setup_script.sh ${INST_SCRIPTS}/setup_script.sh
 
-RUN bash ${INST_SCRIPTS}/setup_script.sh && \
-    groupadd -g 0 root && \
-    useradd --system --create-home --uid 1001 --gid 0 -G 0,1001 ifaas
+RUN useradd --system --create-home --uid 1001 --gid 0 ifaas && \
+    bash ${INST_SCRIPTS}/setup_script.sh
 
 COPY src/xorg.conf /etc/X11/xorg.conf
 ENV TINI_VERSION v0.19.0
