@@ -1,0 +1,126 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ifaas-test-app
+  namespace: ifaas-staging
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: ifaas
+      app.kubernetes.io/instance: ifaas
+      app.kubernetes.io/name: ifaas
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: ifaas
+        app.kubernetes.io/instance: ifaas
+        app.kubernetes.io/name: ifaas
+        circleci.com/component-name: ifaas
+        circleci.com/version: 10.4.3-67d9ca05b1168146689f19ef404a629ce29ca8ff-circleci-SNA
+        liveintent.com/environment: staging
+        replicated: "true"
+        tags.datadoghq.com/service: ifaas
+        tags.datadoghq.com/source: ifaas
+        tags.datadoghq.com/sourcecategory: scala-app
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: node.kubernetes.io/nodegroup
+                    operator: In
+                    values:
+                      - ifaas-gpu
+      containers:
+        - env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.hostIP
+            - name: OPENTELEMETRY_EXPORTER_OTLP_ENDPOINT
+              value: http://opentelemetry-collector.opentelemetry.svc.cluster.local:4317
+          envFrom:
+            - configMapRef:
+                name: ifaas
+            - secretRef:
+                name: ifaas
+          image: ghcr.io/l13t/docker-nvidia-xsession:master
+          imagePullPolicy: Always
+          name: ifaas-test-chrome
+          ports:
+            - containerPort: 9000
+              name: http
+              protocol: TCP
+          resources:
+            limits:
+              memory: 11Gi
+              nvidia.com/gpu: "1"
+            requests:
+              cpu: "6"
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - "SYS_ADMIN"
+            runAsNonRoot: false
+            runAsUser: 0
+          volumeMounts:
+            - mountPath: /dev/shm
+              name: dshm
+      dnsPolicy: ClusterFirst
+      initContainers:
+        - args:
+            - monitoring
+            - app=datadog-agent
+          env:
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+          image: 425934172946.dkr.ecr.us-east-1.amazonaws.com/essential-wait:1.0.2
+          imagePullPolicy: Always
+          name: ifaas-wait-for-datadog-agent
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 0
+      serviceAccount: ifaas
+      serviceAccountName: ifaas
+      terminationGracePeriodSeconds: 90
+      tolerations:
+        - effect: NoSchedule
+          key: dedicated
+          operator: Equal
+          value: ifaas-gpu
+        - effect: NoSchedule
+          key: nvidia.com/gpu
+          operator: Exists
+      volumes:
+        - emptyDir:
+            medium: Memory
+            sizeLimit: 512Mi
+          name: dshm

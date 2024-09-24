@@ -12,11 +12,10 @@ ENV DEBIAN_FRONTEND=noninteractive \
     TZ=${TZ} \
     INST_SCRIPTS=/opt/scripts
 
-COPY src/supervisord.conf /etc/supervisor.conf
 COPY src/setup_script.sh ${INST_SCRIPTS}/setup_script.sh
 
 RUN bash ${INST_SCRIPTS}/setup_script.sh && \
-    useradd --system --create-home --uid 1001 --gid 0 ifaas
+    useradd --system --create-home --uid 1001 --gid 0 -G 0,1001 ifaas
 
 COPY src/xorg.conf /etc/X11/xorg.conf
 ENV TINI_VERSION v0.19.0
@@ -28,6 +27,8 @@ RUN gpg --batch --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 595E85A6B1
     && gpg --batch --verify /tini.asc /tini && \
     chmod +x /tini
 
+ADD src/lightdm.conf /etc/lightdm/lightdm.conf
+
 ENV LC_ALL="en_US.UTF-8"
 ENV LANGUAGE="en_US:en"
 ENV DISPLAY=":0"
@@ -38,6 +39,11 @@ ENV AWS_REGION="us-east-1"
 ENTRYPOINT ["/tini", "--"]
 
 COPY src/entrypoint.sh /entrypoint.sh
+COPY src/openbox_autostart /etc/xdg/openbox/autostart
 RUN chmod +x /entrypoint.sh
+
+RUN echo "Cache cleanup" && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 
 CMD ["/entrypoint.sh"]
