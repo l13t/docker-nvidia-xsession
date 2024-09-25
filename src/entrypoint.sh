@@ -9,3 +9,4 @@ sleep 1
 DISPLAY=:0 xterm &
 DISPLAY=:0 google-chrome --no-sandbox
 cat /var/log/Xorg.0.log
+sleep 600
