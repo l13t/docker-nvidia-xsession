@@ -33,6 +33,8 @@ wget -q -O- https://packagecloud.io/dcommander/virtualgl/gpgkey | gpg --dearmor 
 apt-get update
 apt-get install -y virtualgl
 
+apt-get install -y locales && locale-gen en_US.UTF-8
+
 mkdir /tmp/xdg
 
 export XDG_RUNTIME_DIR=/tmp/xdg
