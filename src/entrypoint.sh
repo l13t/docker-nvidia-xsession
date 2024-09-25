@@ -8,3 +8,4 @@ x11vnc -passwd q1w2e3 -forever -shared -rfbport 5900 -display :0 &
 sleep 1
 DISPLAY=:0 xterm &
 DISPLAY=:0 google-chrome --no-sandbox
+cat /var/log/Xorg.0.log
