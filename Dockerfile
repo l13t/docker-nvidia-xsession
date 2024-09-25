@@ -35,6 +35,7 @@ ENV DISPLAY=":0"
 ENV CHROME_CONFIG_HOME="/opt/docker"
 ENV LANG="en_US.UTF-8"
 ENV AWS_REGION="us-east-1"
+ENV XDG_RUNTIME_DIR="/tmp/xdg"
 
 ENTRYPOINT ["/tini", "--"]
 

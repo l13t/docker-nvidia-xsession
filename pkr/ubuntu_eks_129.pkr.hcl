@@ -13,7 +13,7 @@ locals {
 
 data "amazon-ami" "ubuntu_2204_ami_amd64" {
   filters = {
-    name                = "ubuntu-eks/k8s_1.28/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
+    name                = "ubuntu-eks/k8s_1.29/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"
     root-device-type    = "ebs"
     virtualization-type = "hvm"
   }
@@ -59,13 +59,13 @@ source "amazon-ebs" "ubuntu_2204_ami_amd64" {
 
 build {
   source "source.amazon-ebs.ubuntu_2204_ami_amd64" {
-    name = "li-eks-128-ubuntu-2004-amd64"
+    name = "li-eks-129-ubuntu-2004-amd64"
 
-    ami_name = "li-eks-128-ubuntu-2004-amd64-${local.timever}"
+    ami_name = "li-eks-129-ubuntu-2004-amd64-${local.timever}"
 
     tags = merge(local.ami_tags,
       {
-        Name              = "li-eks-128-ubuntu-2004-amd64-${local.timever}"
+        Name              = "li-eks-129-ubuntu-2004-amd64-${local.timever}"
         os_distro         = "Ubuntu"
         os_distro_version = "20.04"
       }
@@ -73,7 +73,7 @@ build {
 
     run_tags = merge(local.ami_tags,
       {
-        Name              = "li-eks-128-ubuntu-2004-amd64-${local.timever}"
+        Name              = "li-eks-129-ubuntu-2004-amd64-${local.timever}"
         os_distro         = "Ubuntu"
         os_distro_version = "20.04"
       }
