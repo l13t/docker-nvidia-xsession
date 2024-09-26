@@ -72,10 +72,10 @@ spec:
               protocol: TCP
           resources:
             limits:
-              memory: 11Gi
               nvidia.com/gpu: "1"
             requests:
               cpu: "6"
+              memory: 10Gi
           securityContext:
             capabilities:
               drop:

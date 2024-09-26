@@ -40,11 +40,12 @@ ENV XDG_RUNTIME_DIR="/tmp/xdg"
 ENTRYPOINT ["/tini", "--"]
 
 COPY src/entrypoint.sh /entrypoint.sh
-COPY src/openbox_autostart /etc/xdg/openbox/autostart
-RUN chmod +x /entrypoint.sh
+COPY --chown=ifaas:ifaas src/openbox_autostart /home/ifaas/.config/openbox/autostart.sh
+RUN chmod +x /entrypoint.sh /home/ifaas/.config/openbox/autostart.sh
 
 RUN echo "Cache cleanup" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 
+USER ifaas
 CMD ["/entrypoint.sh"]
