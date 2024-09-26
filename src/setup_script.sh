@@ -40,4 +40,4 @@ mkdir /tmp/xdg
 
 export XDG_RUNTIME_DIR=/tmp/xdg
 
-sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
+# sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
