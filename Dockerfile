@@ -47,6 +47,6 @@ RUN echo "Cache cleanup" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 
-USER ifaas
+USER 1001:0
 ENTRYPOINT ["/tini", "--"]
 CMD ["/entrypoint.sh"]
