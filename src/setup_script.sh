@@ -30,6 +30,8 @@ send "n\r"
 expect "A view-only password is not used"
 exit
 EOF
+mv /root/.vnc/passwd /home/ifaas/.vnc/passwd
+chown ifaas:ifaas /home/ifaas/.vnc/passwd
 
 wget -q -O- https://packagecloud.io/dcommander/virtualgl/gpgkey | gpg --dearmor >/etc/apt/trusted.gpg.d/VirtualGL.gpg &&
   echo "deb [signed-by=/etc/apt/trusted.gpg.d/VirtualGL.gpg] https://packagecloud.io/dcommander/virtualgl/any/ any main" >/etc/apt/sources.list.d/virtualgl.list
