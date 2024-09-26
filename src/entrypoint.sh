@@ -4,7 +4,8 @@ if [ -z "$DBUS_SESSION_BUS_ADDRESS" ]; then
     eval $(dbus-launch --sh-syntax --exit-with-session)
 fi
 
-X -config /etc/X11/xorg.conf -noreset -nolisten tcp &
+# X -config /etc/X11/xorg.conf -noreset -nolisten tcp &
+startx &
 sleep 5
 DISPLAY=:0 dbus-launch
 DISPLAY=:0 openbox-session &
