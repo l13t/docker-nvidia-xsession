@@ -36,17 +36,18 @@ ENV DISPLAY=":0"
 ENV CHROME_CONFIG_HOME="/opt/docker"
 ENV LANG="en_US.UTF-8"
 ENV AWS_REGION="us-east-1"
-ENV XDG_RUNTIME_DIR="/tmp/xdg"
+ENV XDG_RUNTIME_DIR="/tmp"
 
 
 COPY src/entrypoint.sh /entrypoint.sh
-COPY --chown=ifaas:ifaas src/openbox_autostart /home/ifaas/.config/openbox/autostart.sh
-RUN chmod +x /entrypoint.sh /home/ifaas/.config/openbox/autostart.sh
+COPY --chown=ifaas:ifaas src/openbox_autostart /home/ifaas/.config/openbox/autostart
+RUN chmod +x /entrypoint.sh /home/ifaas/.config/openbox/autostart
 
 RUN echo "Cache cleanup" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 
 USER 1001:0
+WORKDIR /home/ifaas
 ENTRYPOINT ["/tini", "--"]
 CMD ["/entrypoint.sh"]

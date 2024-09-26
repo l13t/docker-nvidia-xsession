@@ -10,7 +10,8 @@ sleep 5
 DISPLAY=:0 dbus-launch
 DISPLAY=:0 openbox-session &
 sleep 1
-x11vnc -passwd q1w2e3 -forever -shared -rfbport 5900 -display :0
+# x11vnc -passwd q1w2e3 -forever -shared -rfbport 5900 -display :0
+x0vncserver :0 -rfbport 5900 -rfbauth /etc/vncpasswd
 sleep 1
 # DISPLAY=:0 xterm &
 # DISPLAY=:0 google-chrome --no-sandbox &
