@@ -25,7 +25,8 @@ ADD https://github.com/krallin/tini/releases/download/$TINI_VERSION/tini.asc /ti
 
 RUN gpg --batch --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 595E85A6B1B4779EA4DAAEC70B588DFF0527A9B7 \
     && gpg --batch --verify /tini.asc /tini && \
-    chmod +x /tini
+    chmod +x /tini && \
+    rm -rf /tini.asc
 
 COPY src/lightdm.conf /etc/lightdm/lightdm.conf
 
@@ -37,7 +38,6 @@ ENV LANG="en_US.UTF-8"
 ENV AWS_REGION="us-east-1"
 ENV XDG_RUNTIME_DIR="/tmp/xdg"
 
-ENTRYPOINT ["/tini", "--"]
 
 COPY src/entrypoint.sh /entrypoint.sh
 COPY --chown=ifaas:ifaas src/openbox_autostart /home/ifaas/.config/openbox/autostart.sh
@@ -48,4 +48,5 @@ RUN echo "Cache cleanup" && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
 
 USER ifaas
+ENTRYPOINT ["/tini", "--"]
 CMD ["/entrypoint.sh"]
