@@ -39,3 +39,5 @@ apt-get -qq install -y locales && locale-gen en_US.UTF-8
 mkdir /tmp/xdg
 
 export XDG_RUNTIME_DIR=/tmp/xdg
+
+sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config

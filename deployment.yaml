@@ -83,7 +83,7 @@ spec:
               add:
                 - "SYS_ADMIN"
             runAsNonRoot: false
-            runAsUser: 0
+            runAsUser: 1001
           volumeMounts:
             - mountPath: /dev/shm
               name: dshm
