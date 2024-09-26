@@ -13,4 +13,3 @@ echo "openbox-session &" >~/.xinitrc
 startx
 
 cat /var/log/Xorg.0.log
-sleep 600
