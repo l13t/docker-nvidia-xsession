@@ -16,16 +16,18 @@ cat >/usr/share/glvnd/egl_vendor.d/10_nvidia.json <<EOF
 }
 EOF
 
-vncpwd_prog=/usr/bin/vncpasswd
+vncpwd_prog=/usr/bin/tigervncpasswd
 mypass="q1w2e3"
 
 /usr/bin/expect <<EOF
-spawn "$vncpwd_prog -f /etc/vncpasswd"
+spawn "$vncpwd_prog"
 expect "Password:"
 send "$mypass\r"
 expect "Verify:"
 send "$mypass\r"
-expect eof
+expect "Would you like to enter a view-only password (y/n)?"
+send "n\r"
+expect "A view-only password is not used"
 exit
 EOF
 
