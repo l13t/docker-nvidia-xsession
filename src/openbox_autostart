@@ -1,3 +1,0 @@
-x11vnc -passwd q1w2e3 -forever -shared -rfbport 5900 -display :0 &
-google-chrome --no-sandbox &
-xterm &
