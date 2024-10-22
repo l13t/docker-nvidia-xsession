@@ -3,9 +3,6 @@
 apt-get update
 apt-get -qq install -y openbox openbox-menu xorg libnvidia-gl-550-server dbus-x11 gnome-icon-theme libcanberra-gtk-module libcanberra-gtk3-module libgl1-mesa-dri libgl1-mesa-glx libnotify-bin rtkit xserver-xorg-video-nvidia-550-server nvidia-driver-550-server expect x11vnc xterm python3-xdg tigervnc-scraping-server
 apt-get -qq install -y wget software-properties-common
-wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-apt-get -qq install -y ./google-chrome-stable_current_amd64.deb
-rm -f google-chrome-stable_current_amd64.deb
 
 cat >/usr/share/glvnd/egl_vendor.d/10_nvidia.json <<EOF
 {
@@ -30,13 +27,17 @@ send "n\r"
 expect "A view-only password is not used"
 exit
 EOF
+mkdir -p /home/ifaas/.vnc
 mv /root/.vnc/passwd /home/ifaas/.vnc/passwd
 chown ifaas:ifaas /home/ifaas/.vnc/passwd
 
-wget -q -O- https://packagecloud.io/dcommander/virtualgl/gpgkey | gpg --dearmor >/etc/apt/trusted.gpg.d/VirtualGL.gpg &&
-  echo "deb [signed-by=/etc/apt/trusted.gpg.d/VirtualGL.gpg] https://packagecloud.io/dcommander/virtualgl/any/ any main" >/etc/apt/sources.list.d/virtualgl.list
+wget -q -O- https://packagecloud.io/dcommander/virtualgl/gpgkey | gpg --dearmor >/etc/apt/trusted.gpg.d/VirtualGL.gpg && echo "deb [signed-by=/etc/apt/trusted.gpg.d/VirtualGL.gpg] https://packagecloud.io/dcommander/virtualgl/any/ any main" >/etc/apt/sources.list.d/virtualgl.list
+
+curl -fsSL https://apt.fury.io/wez/gpg.key | sudo gpg --yes --dearmor -o /etc/apt/keyrings/wezterm-fury.gpg
+echo 'deb [signed-by=/etc/apt/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | sudo tee /etc/apt/sources.list.d/wezterm.list
+
 apt-get update
-apt-get -qq install -y virtualgl
+apt-get -qq install -y virtualgl wezterm
 
 apt-get -qq install -y locales && locale-gen en_US.UTF-8
 

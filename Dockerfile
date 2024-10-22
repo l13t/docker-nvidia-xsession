@@ -28,18 +28,14 @@ RUN gpg --batch --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 595E85A6B1
     chmod +x /tini && \
     rm -rf /tini.asc
 
-COPY src/lightdm.conf /etc/lightdm/lightdm.conf
-
 ENV LC_ALL="en_US.UTF-8"
 ENV LANGUAGE="en_US:en"
 ENV DISPLAY=":0"
 ENV CHROME_CONFIG_HOME="/opt/docker"
 ENV LANG="en_US.UTF-8"
-ENV AWS_REGION="us-east-1"
 ENV XDG_RUNTIME_DIR="/tmp"
 
-
-COPY src/entrypoint.sh /entrypoint.sh
+COPY src/init.sh /init.sh
 
 RUN echo "Cache cleanup" && \
     apt-get clean && \
@@ -48,4 +44,4 @@ RUN echo "Cache cleanup" && \
 USER 1001:0
 WORKDIR /home/ifaas
 ENTRYPOINT ["/tini", "--"]
-CMD ["/entrypoint.sh"]
+CMD ["/init.sh"]
