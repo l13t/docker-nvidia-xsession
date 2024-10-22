@@ -29,7 +29,7 @@ exit
 EOF
 mkdir -p /home/ifaas/.vnc
 mv /root/.vnc/passwd /home/ifaas/.vnc/passwd
-chown ifaas:ifaas /home/ifaas/.vnc/passwd
+chown -R ifaas:ifaas /home/ifaas/
 
 wget -q -O- https://packagecloud.io/dcommander/virtualgl/gpgkey | gpg --dearmor >/etc/apt/trusted.gpg.d/VirtualGL.gpg && echo "deb [signed-by=/etc/apt/trusted.gpg.d/VirtualGL.gpg] https://packagecloud.io/dcommander/virtualgl/any/ any main" >/etc/apt/sources.list.d/virtualgl.list
 
