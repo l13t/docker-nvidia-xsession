@@ -37,6 +37,9 @@ ENV XDG_RUNTIME_DIR="/tmp"
 
 COPY src/init.sh /init.sh
 
+RUN mkdir /home/ifaas/.config/openbox/
+COPY --chown=ifaas:ifaas src/autostart /home/ifaas/.config/openbox/autostart
+
 RUN echo "Cache cleanup" && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/*
