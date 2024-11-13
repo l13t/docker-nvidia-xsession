@@ -84,7 +84,8 @@ build {
     inline = [
       "export DEBIAN_FRONTEND=noninteractive",
       "sudo apt-get update",
-      "sudo DEBIAN_FRONTEND=noninteractive apt-get -y install nvidia-driver-550-server xserver-xorg-video-nvidia-550-server libnvidia-cfg1-550-server mesa-vulkan-drivers",
+      "sudo DEBIAN_FRONTEND=noninteractive apt-get -y install nvidia-driver-550-server xserver-xorg-video-nvidia-550-server libnvidia-cfg1-550-server",
+      # "sudo DEBIAN_FRONTEND=noninteractive apt-get -y install nvidia-driver-550-server xserver-xorg-video-nvidia-550-server libnvidia-cfg1-550-server mesa-vulkan-drivers",
       # "sudo apt search ubuntu-drivers-common",
       # "sudo DEBIAN_FRONTEND=noninteractive apt-get install -y ubuntu-drivers-common",
       # "sudo ubuntu-drivers install nvidia:550-server",
